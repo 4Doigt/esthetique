@@ -1,5 +1,5 @@
-Dans cette oeuvre, une traînée aléatoire de figure à paramètres aléatoires suit le curseur de la souris à travers une environnement noir. 
-Les couleurs des figures sont choisis aléatoirement parmis une palette de couleur soft et la fréquence d'apparition des figures est limitée pour une expérience utilisateur plus douce et agréable.
+Dans cette oeuvre, une traînée aléatoire de figure à paramètres aléatoires suit le curseur de la souris à travers un environnement noir. 
+Les couleurs des figures sont choisis aléatoirement parmis une palette de couleur soft et la fréquence d'apparition des figures est limitée pour une expérience utilisateur optimale.
 
 Pour expliquer ce code il faut revenir sur plusieurs points clés : 
 
@@ -30,5 +30,4 @@ Pour expliquer ce code il faut revenir sur plusieurs points clés :
   Pour que les formes suivent la souris on les fait apparaître aux coordonnées x et y de la souris avec mouseX et mouseY.
 
 
-  Maintenant concernant les crédits pour cette oeuvre je me suis inspiré de l'introduction du film Monstre et Cie que j'ai revisité en ajoutant des formes circulaires. On y retrouve le style de Saul Bass dans c'est introduction
-  de film.
+  Maintenant concernant les crédits pour cette oeuvre je me suis inspiré de l'introduction du film Monstre et Cie que j'ai revisité en ajoutant des formes circulaires. On y retrouve le style de Saul Bass dans ses introductions de film.
