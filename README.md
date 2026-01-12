@@ -1,1 +1,1 @@
-# esthetique
+# Workshop Esthétique et Algorithmique
