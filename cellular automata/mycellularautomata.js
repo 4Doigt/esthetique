@@ -6,6 +6,7 @@ let grid;
 
 function setup() {
   createCanvas(cols * cellSize, rangees * cellSize);
+  colorMode(HSB, 360, 100, 100); // Utilisé pour la saturation des cellules en fct de l'âge de celle-ci
   grid = createGrid();
 }
 
@@ -13,7 +14,7 @@ function draw() {
   background(220);
   drawGrid();
   nextGeneration();
-  frameRate(10)
+  frameRate(2)
 }
 
 function createGrid() {
@@ -31,12 +32,17 @@ function createGrid() {
 function drawGrid() {
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rangees; y++) {
-      if (grid[x][y] === 1) {
-        fill(0);// cellule morte (blanc)
+
+      let age = grid[x][y]; // âge de la cellule
+      let sat = min(age * 5, 100) // saturation calculé en fonction de l'âge
+      
+      if (age > 0) {
+        fill(255, sat, 80);// saturation de la cellule dépend de son âge
       } else {
-        fill(255);// cellule vivante (noir)
+        fill(0, 0, 95);// cellule morte (blanc)
       }
-      stroke('grey');// couleur des contours des cellules 
+
+      stroke('grey');
       rect(x * cellSize, y * cellSize, cellSize, cellSize);
     }
   }
@@ -68,9 +74,13 @@ function nextGeneration() {
       // Définition des règles
       // Modification d'état des cellules de la génération suivante en fct des règles
       if (etat === 0 && neighbors === 3) {
-        next[x][y] = 1;
-      } else if (etat === 1 && (neighbors < 2 || neighbors > 3)) {
-        next[x][y] = 0;
+        next[x][y] = 1; // La cellule naît
+      } else if (etat === 0 && neighbors === 2 && random() < 0.1) { // Chance d'auto-régénération
+          next[x][y] = 1; 
+      } else if (etat > 0 && (neighbors < 1 || neighbors > 4)) {
+        next[x][y] = 0; // La cellule meurt
+      } else if (etat > 0){
+       next[x][y] = etat + 1; // La cellule vieillit   
       } else {
         next[x][y] = etat;
       }
