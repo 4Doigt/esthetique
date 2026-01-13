@@ -36,7 +36,8 @@ function drawGrid() {
       let sat = min(age * 10, 100);
       let alpha = map(age, 0, 20, 50, 255); // Plus la cellule est vielle plus elle est opaque
       let size = map(age*10, 0, 20, cellSize * 0.5, cellSize*1.3); // Plus elle est jeune plus elle est petite
-
+      let width = size;
+      let height = size + countNeighbors(x, y)*0.7; // Plus la cellule a des voisins plus elle s'allonge
       if (age > 0) {
         fill(210, sat, 80, alpha);
       } else {
@@ -44,7 +45,7 @@ function drawGrid() {
       }
 
       noStroke();
-      ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, size, size); // Le centre de l'ellipse est placé au milieu de la cellule
+      ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, width, height); // cf ReadMe
     }
   }
 }
@@ -91,4 +92,3 @@ function nextGeneration() {
 
   grid = next; // La grille de la génération actuelle est remplacé par la grille de la prochaine génération
 }
-
