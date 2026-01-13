@@ -26,22 +26,18 @@ Au lieu de simples carrés ou cercles, on utilise des ellipses dont la hauteur a
 des explosions ou des ondulations similaires aux effets visuels de MegaBonk.
 
 - Paramètres de l'ellipse :
-
 x * cellSize + cellSize / 2 et y * cellSize + cellSize / 2 positionnent le centre de l’ellipse au milieu de la cellule de la grille
 Dans ce projet, height varie selon le nombre de voisins, ce qui fait que les cellules entourées s’allongent, créant un effet organique et dynamique
 
 - Auto-régénération : 
-
 Certaines cellules mortes peuvent renaître aléatoirement si elles ont 2 voisins, avec 10 % de chance (random() < 0.1). Cela empêche la grille de mourir complètement et ajoute un effet vivant et 
 imprévisible, renforçant le rendu organique et dynamique de l’automate.
 
 - Utilisation de floor :
-
 La fonction floor() convertit un nombre flottant en entier inférieur. Ici, elle est utilisée pour initialiser chaque cellule avec 0 (morte) ou 1 (vivante), garantissant que l’état de la cellule est toujours un entier simple.
 
 - Grille parralèle de type :
-
-  Elle permet de stocker quelle cellule était infectée ou non dans les générations précédentes pour créer les prochaines générations.
+Elle permet de stocker quelle cellule était infectée ou non dans les générations précédentes pour créer les prochaines générations.
 
 
 Credit :
