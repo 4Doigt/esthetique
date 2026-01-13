@@ -11,10 +11,10 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  background(220,5); // L'alpha est à 5 pour créer un effet de traînée pour avoir un rendu plus fluide
   drawGrid();
   nextGeneration();
-  frameRate(2)
+  frameRate(7)
 }
 
 function createGrid() {
@@ -23,7 +23,7 @@ function createGrid() {
   for (let x = 0; x < cols; x++) {
     arr[x] = new Array(rangees);// creation d'un tableau de taille rangees pour chaque élément du tableau col
     for (let y = 0; y < rangees; y++) {
-      arr[x][y] = floor(random(2)); // Etat de la cellule égale à 0 ou 1
+      arr[x][y] = floor(random(2)); // Etat initial de la cellule égale à 0 ou 1
     }
   }
   return arr;// Tableau 2D avec des cellules à états aléatoires 
@@ -32,21 +32,23 @@ function createGrid() {
 function drawGrid() {
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rangees; y++) {
+      let age = grid[x][y];
+      let sat = min(age * 10, 100);
+      let alpha = map(age, 0, 20, 50, 255); // Plus la cellule est vielle plus elle est opaque
+      let size = map(age*10, 0, 20, cellSize * 0.5, cellSize*1.3); // Plus elle est jeune plus elle est petite
 
-      let age = grid[x][y]; // âge de la cellule
-      let sat = min(age * 5, 100) // saturation calculé en fonction de l'âge
-      
       if (age > 0) {
-        fill(255, sat, 80);// saturation de la cellule dépend de son âge
+        fill(210, sat, 80, alpha);
       } else {
-        fill(0, 0, 95);// cellule morte (blanc)
+        fill(0, 0, 95, 0); 
       }
 
-      stroke('grey');
-      rect(x * cellSize, y * cellSize, cellSize, cellSize);
+      noStroke();
+      ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, size, size); // Le centre de l'ellipse est placé au milieu de la cellule
     }
   }
 }
+
 
 function countNeighbors(x, y) {
   let sum = 0;
@@ -82,10 +84,11 @@ function nextGeneration() {
       } else if (etat > 0){
        next[x][y] = etat + 1; // La cellule vieillit   
       } else {
-        next[x][y] = etat;
+        next[x][y] = etat; // La cellule reste morte
       }
     }
   }
 
   grid = next; // La grille de la génération actuelle est remplacé par la grille de la prochaine génération
 }
+
