@@ -5,7 +5,7 @@ let Y=400;
 
 function setup() {
   createCanvas(X, Y);
-  frameRate(10) # Limitation des frames pour un rendu plus agréable
+  frameRate(10) // Limitation des frames pour un rendu plus agréable
 }
 
 function draw() {
