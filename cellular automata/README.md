@@ -1,4 +1,4 @@
-Ce projet est un automate cellulaire interactif et artistique, inspiré du jeu de la vie, des effets visuels des explosions dans le jeu MegaBonk et modélise artistiquement la propagation d'une epidemie. 
+Ce projet est un automate cellulaire interactif et artistique, inspiré du jeu de la vie, des effets visuels des explosions dans le jeu MegaBonk et qui modélise artistiquement la propagation d'une epidemie. 
 On génère au départ des motifs organiques dynamiques où les cellules vivent, vieillissent et interagissent visuellement avec leur environnement. Puis on offre la possibilité de cliquer dans l'environnement pour
 ajouter une cellule infectée qui va contaminer ses voisins.
 
