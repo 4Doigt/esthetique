@@ -133,7 +133,7 @@ function nextGeneration() {
 function mousePressed() {
   let x = floor(mouseX / cellSize); // Conversion du clic en coordonées de grille
   let y = floor(mouseY / cellSize);
-  if (x >= 0 && x < cols && y >= 0 && y < rangees) { // Empêche de cliquer en dehors du canvas
+  if (x >= 0 && x < cols && y >= 0 && y < rangees) { // Empêche de cliquer en dehors de l'aperçu
     grid[x][y] = 1;       // on la rend vivante
     gridType[x][y] = 1;   // on la marque comme épidémie
   }
