@@ -35,7 +35,7 @@ function createGrid() { // Fonction utile pour les grilles initiales
 function createEmptyGrid() {
   let arr = new Array(cols);
   for (let x = 0; x < cols; x++) {
-    arr[x] = new Array(rangees).fill(0);
+    arr[x] = new Array(rangees).fill(0); // Grille vide
   }
   return arr;
 }
@@ -56,7 +56,9 @@ function drawGrid() {
         else { 
           fill(210, sat, 80, alpha); // Bleuâtre si la cellule est normale
         } 
-    } else {
+      } 
+      
+      else {
         fill(0, 0, 95, 0); 
       }
 
@@ -69,7 +71,6 @@ function drawGrid() {
 
 function countNeighbors(x, y) {
   let sum = 0;
-
   for (let i = -1; i <= 1; i++) {
     for (let j = -1; j <= 1; j++) { // On regarde aux alentours de la cellule
       let col = (x + i + cols) % cols; // Position des voisins sur l'axe horizontal
@@ -108,19 +109,24 @@ function nextGeneration() {
       // Modification d'état des cellules de la génération suivante en fct des règles
       if (etat === 0 && neighbors === 3) {
         next[x][y] = 1; // La cellule naît
-      } else if (etat === 0 && neighbors === 2 && random() < 0.1) { // Chance d'auto-régénération
+      } 
+      else if (etat === 0 && neighbors === 2 && random() < 0.1) { // Chance d'auto-régénération
           next[x][y] = 1; 
-      } else if (etat > 0 && (neighbors < 1 || neighbors > 4)) {
+      } 
+      else if (etat > 0 && (neighbors < 1 || neighbors > 4)) {
         next[x][y] = 0; // La cellule meurt
-      } else if (etat > 0 && neighbors > 0){
-         next[x][y] = etat + 1; // La cellule vieillit   
+      } 
+      else if (etat > 0 && neighbors > 0){
+          next[x][y] = etat + 1; // La cellule vieillit   
           // Propagation épidémique
           if (gridType[x][y] === 0 && countEpidemicNeighbors(x, y) > 0 && random() < 0.3) {
             nextType[x][y] = 1; // La cellule s'infecte
-        } else {
+          } 
+          else {
             nextType[x][y] = gridType[x][y];
           }    
-      } else {
+      } 
+      else {
         next[x][y] = etat; // La cellule reste morte
       }
     }
