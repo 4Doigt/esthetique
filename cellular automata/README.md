@@ -1,8 +1,10 @@
-Ce projet est un automate cellulaire interactif et artistique, inspiré du jeu de la vie et des effets visuels des explosions dans le jeu MegaBonk. 
-Il génère des motifs organiques dynamiques où les cellules vivent, vieillissent et interagissent visuellement avec leur environnement.
+Ce projet est un automate cellulaire interactif et artistique, inspiré du jeu de la vie, des effets visuels des explosions dans le jeu MegaBonk et modélise artistiquement la propagation d'une epidemie. 
+On génère au départ des motifs organiques dynamiques où les cellules vivent, vieillissent et interagissent visuellement avec leur environnement. Puis on offre la possibilité de cliquer dans l'environnement pour
+ajouter une cellule infectée qui va contaminer ses voisins.
 
-L’automate fonctionne sur une grille 2D, où chaque cellule peut être vivante ou morte et possède un âge, qui influence son apparence. 
+L’automate fonctionne sur une grille 2D, où chaque cellule peut être vivante ou morte et possède un âge et un type (infectée ou normale), qui influence son apparence. 
 Les règles principales s’inspirent du jeu de la vie : une cellule naît si elle a 3 voisins, meurt si elle est trop isolée ou surpeuplée, et peut parfois se régénérer aléatoirement.
+Mais il y a en plus une dimension d'âge et d'épidémie.
 
 Pour expliquer ce code il faut revenir sur plusieurs points clés :
 
@@ -36,6 +38,11 @@ imprévisible, renforçant le rendu organique et dynamique de l’automate.
 - Utilisation de floor :
 
 La fonction floor() convertit un nombre flottant en entier inférieur. Ici, elle est utilisée pour initialiser chaque cellule avec 0 (morte) ou 1 (vivante), garantissant que l’état de la cellule est toujours un entier simple.
+
+- Grille parralèle de type :
+
+  Elle permet de stocker quelle cellule était infectée ou non dans les générations précédentes pour créer les prochaines générations.
+
 
 Credit :
 
