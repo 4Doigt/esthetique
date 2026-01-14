@@ -28,7 +28,7 @@ function draw() {
     let xoff = 0; // Décalage pour l'axe x du Perlin Noise
     for (let x = 0; x < cols; x++) { // Boucle sur toutes les colonnes de la grille
       let angle = noise(xoff, yoff, frameCount * 0.01) * TWO_PI * 4; // Définition de l'angle du champ
-      let v = p5.Vector.fromAngle(angle); // Création vecteur unité directionnel qui dépend de l'angle
+      let v = p5.Vector.fromAngle(angle); // Création vecteur unité directionnel qui dépend de l'angle avec bibliothèque p5
       flowfield[x + y * cols] = v; // Stockage du vecteur dans le tableau flowfield
       xoff += 0.1; // Incrémentation du décalage pour une variation légère du bruit
     }
