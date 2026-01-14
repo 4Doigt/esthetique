@@ -1,60 +1,91 @@
-let particules = []; // Tableau des particules
-let cols, rangees; // Définition des colonnes et rangées
-let cellSize = 20; // Taille des cellules ( ça influence le mouvement )
-let flowfield; // Définition du tableau des vecteurs de direction
+let kochSegments = []; // Tableau pour stocker tous les segments du flocon de Koch
+let particules = [];   // Tableau pour stocker toutes les particules qui vont se déplacer sur le flocon
+let speed = 2;         // Vitesse à laquelle les particules se déplacent le long des segments
 
 function setup() {
-  createCanvas(600, 600);
-  cols = floor(width / cellSize); // Nombre de colonnes de la grille flowfield 
-  rangees = floor(height / cellSize); // Nombre de lignes de la grille flowfield
-  flowfield = new Array(cols * rangees); // Création de la grille vide flowfield
+  createCanvas(600, 600); 
+  stroke(255);            // Couleur du trait par défaut
+  noFill();               // Pas de remplissage pour les formes (on va juste tracer des lignes)
 
-  // Création des particules
-  for (let i = 0; i < 400; i++) { // Boucle 400 fois une pour chaque particule
-    particules.push({ // On ajoute une particule au tableau particules
-      pos: createVector(random(width), random(height)), // Position aléatoire de la particule
-      vel: createVector(0,0), // Vitesse initiale de la particule nulle
-      color: color(random(100,255), random(50,200), random(50,150), 150) // Couleur RGBA de la particule aléatoire avec une transparence de 150
+  // On définit les 3 points du triangle initial pour le flocon de Koch
+  let a = createVector(width/2, 100);      // Point supérieur du triangle
+  let b = createVector(100, height-100);   // Point inférieur gauche
+  let c = createVector(width-100, height-100); // Point inférieur droit
+
+  // On construit le flocon de Koch en appelant la fonction récursive pour chaque côté du triangle
+  koch(3, a, b); // côté supérieur gauche
+  koch(3, b, c); // côté inférieur
+  koch(3, c, a); // côté supérieur droit
+
+  // On crée les particules sur les segments du flocon
+  for (let i = 0; i < 200; i++) { 
+    // On choisit un segment aléatoire pour placer la particule
+    let seg = floor(random(kochSegments.length));
+    particules.push({
+      segment: seg,  // index du segment sur lequel se trouve la particule
+      t: random(1)   // position relative sur le segment (0 = début, 1 = fin)
     });
   }
 }
 
 function draw() {
-  background(0, 20); // Couleur du background avec un alpha à 20 pour un effet de traînée
- 
-  // Création du flowfield
-  let yoff = 0; // Décalage pour l'axe y du Perlin Noise
-  for (let y = 0; y < rangees; y++) { // Boucle sur toutes les lignes de la grille
-    let xoff = 0; // Décalage pour l'axe x du Perlin Noise
-    for (let x = 0; x < cols; x++) { // Boucle sur toutes les colonnes de la grille
-      let angle = noise(xoff, yoff, frameCount * 0.01) * TWO_PI * 16; // Définition de l'angle du champ
-      let v = p5.Vector.fromAngle(angle); // Création vecteur unité directionnel qui dépend de l'angle avec bibliothèque p5
-      flowfield[x + y * cols] = v; // Stockage du vecteur dans le tableau flowfield
-      xoff += 0.1; // Incrémentation du décalage pour une variation légère du bruit
+  background(0,50); // On efface l'écran avec un fond noir à chaque frame
+
+  // On dessine le flocon de Koch
+  stroke(100, 100, 255); // Couleur bleu clair pour les segments
+  strokeWeight(2);       // Épaisseur des lignes
+  for (let s of kochSegments) {  // Boucle sur tous les segments
+    line(s.p1.x, s.p1.y, s.p2.x, s.p2.y); // On trace la ligne entre p1 et p2
+  }
+
+  // On déplace et dessine les particules
+  fill(255, 200, 0); // Couleur jaune pour les particules
+  noStroke();        // Pas de contour
+  for (let p of particules) { // Boucle sur chaque particule
+    let seg = kochSegments[p.segment]; // On récupère le segment sur lequel la particule est
+
+    // On calcule la position exacte de la particule sur le segment
+    // p.t est entre 0 et 1, p5.Vector.lerp fait l'interpolation linéaire entre p1 et p2
+    let pos = p5.Vector.lerp(seg.p1, seg.p2, p.t);
+
+    // On dessine la particule comme un petit cercle
+    ellipse(pos.x, pos.y, 5);
+
+    // On avance la particule le long du segment
+    // On divise la speed par la longueur du segment pour avoir la même vitesse même si le segment est long
+    p.t += speed / p5.Vector.dist(seg.p1, seg.p2);
+
+    // Quand la particule atteint la fin du segment
+    if (p.t >= 1) {
+      // On passe au segment suivant pour continuer le mouvement sur tout le flocon
+      p.segment = (p.segment + 1) % kochSegments.length; // modulo pour revenir au début
+      p.t = 0; // recommencer au début du nouveau segment
     }
-    yoff += 0.1; // Incrémentation du décalage pour une variation légère du bruit
+  }
+}
+
+// Fonction récursive pour créer les segments du flocon de Koch
+function koch(profondeur, p1, p2) {
+  if (profondeur === 0) { // Condition de base : plus de profondeur
+    // On ajoute le segment final au tableau
+    kochSegments.push({p1: p1.copy(), p2: p2.copy()});
+    return; // arrêter la récursion
   }
 
-  // Déplacement des particules selon le flowfield
-  for (let part of particules) { // Boucle sur toutes les particules
-  let x = constrain(floor(part.pos.x / cellSize), 0, cols - 1); // Position x du vecteur trouvé grâce à la colonne de la grille correspondant à la position de la particule
-  let y = constrain(floor(part.pos.y / cellSize), 0, rangees - 1); // Position y du vecteur trouvé grâce à la ligne de la grille correspondant à la position de la particule
-  let idx = x + y * cols; // Index du vecteur dans le tableau flowfield
-  let force = flowfield[idx]; // Récupère le vecteur de direction à cet endroit
-  part.vel = force.copy(); // Copie le vecteur pour l'utiliser comme vitesse de la particule
-  part.pos.add(part.vel); // Déplace la particule dans le sens du vecteur
+  // On calcule les points intermédiaires du segment divisé
+  let v = p5.Vector.sub(p2, p1);         // vecteur du segment p1→p2
+  let a = p1.copy();                      // point de départ
+  let b = p1.copy().add(v.copy().mult(1/3)); // point à 1/3
+  let d = p1.copy().add(v.copy().mult(2/3)); // point à 2/3
+  let e = p2.copy();                      // point de fin
 
-  // Dessine les particules
-  fill(part.color); // Couleur de remplissage de la particule
-  noStroke(); // Pas de contour
-  ellipse(part.pos.x, part.pos.y, 5); // Dessine la particule comme un petit cercle de 5 px
+  // On calcule le point du pic pour former le triangle du flocon
+  let angle = -PI/3;                      // angle de rotation -60°
+  let c = b.copy().add(v.copy().mult(1/3).rotate(angle)); // point au milieu du segment élevé
 
-    
-  // Rebouclage des particules 
-  // Effet boucle
-  if (part.pos.x > width) part.pos.x = 0;
-  if (part.pos.x < 0) part.pos.x = width;
-  if (part.pos.y > height) part.pos.y = 0;
-  if (part.pos.y < 0) part.pos.y = height;
-  }
+  // Appels récursifs pour chaque sous-segment
+  koch(profondeur-1, a, b);
+  koch(profondeur-1, b, c);
+  koch(profondeur-1, c, d);
+  koch(profondeur-1, d, e);
 }
