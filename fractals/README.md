@@ -12,15 +12,15 @@ Construction du flocon de Koch
 - Le flocon de Koch est généré **récursivement** à partir d’un triangle équilatéral.
 - Chaque segment du triangle est divisé en 4 sous-segments à chaque niveau de profondeur.
 - Un point intermédiaire est calculé pour former le « pic » du flocon, créant ainsi la structure fractale.
-- Tous les segments sont stockés dans un tableau `kochSegments` pour permettre le suivi des particules.
+- Tous les segments sont stockés dans un tableau kochSegments pour permettre le suivi des particules.
   
 Particules
 
 - Les particules sont initialisées aléatoirement sur les segments du flocon.
 - Chaque particule connaît :
   - le **segment** sur lequel elle se trouve
-  - la **position relative** sur le segment (`t` entre 0 et 1)
-- Le déplacement est calculé en interpolant (`lerp`) la position de la particule sur le segment.
+  - la **position relative** sur le segment (t entre 0 et 1)
+- Le déplacement est calculé en interpolant (lerp) la position de la particule sur le segment.
 - La vitesse est proportionnelle à la longueur du segment pour un mouvement uniforme.
 - Quand une particule atteint la fin d’un segment, elle passe au segment suivant pour continuer son parcours sur tout le flocon.
   
