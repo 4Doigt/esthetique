@@ -35,10 +35,6 @@ function construireMots(texte) { // Pour récuperer les mots séparées et crée
 }
 
 function draw() {
-  background(245);
-  fill(20);
-  noStroke(); // Pas de contour pour le texte
-
   let y = 50; // Position initial du premier mot du poème
   for (let ligne of poeme) {
     if (y<560){ // On limite la taille vertical du poème
@@ -49,6 +45,7 @@ function draw() {
       break
     }
   }
+  afficherPoemeDesordonne();
 }
 
 function genererFractale(profondeur) { // On utilise une fractale pour générer le poème ( fct récursive)
@@ -60,4 +57,16 @@ function genererFractale(profondeur) { // On utilise une fractale pour générer
   // On crée deux fractales pour avoir deux lignes poétiques
   genererFractale(profondeur + 1); // Appel récursif de la fonction 
   genererFractale(profondeur + 1); // On crée une bifurcation ( Fractale )
+}
+  
+function afficherPoemeDesordonne() {
+  background(245);
+  fill(20);
+  noStroke(); // Pas de contour pour le texte
+
+  for (let ligne of poeme) { 
+    let x = random(50, width - 150); 
+    let y = random(50, height - 50);
+    text(ligne.trim(), x, y); // On place aléatoirement chaque ligne du poeme sur le canvas ( en l'occurence chaque mot )
+  }
 }
