@@ -94,7 +94,7 @@ function mousePressed() {
   for (let i = motsVisuels.length - 1; i >= 0; i--) { // On parcourt motsVisuels de la fin au début du tableau
     let m = motsVisuels[i];
     let w = textWidth(m.texte);
-    let h = 16;
+    let h = m.size;
 
     if (
       mouseX > m.x &&
