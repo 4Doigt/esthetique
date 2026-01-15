@@ -1,12 +1,32 @@
 let mots = []; // Tableau vide des mots exploitables pour le poème qu'on remplit avec un appel d'API
 let poeme = []; // Tableau vide du poeme qu'on remplit grâce à genererFractale(profondeur)
+let polices = [ // Tableau des polices
+  "Arial",
+  "Arial Black",
+  "Verdana",
+  "Tahoma",
+  "Trebuchet MS",
+  "Impact",
+  "Times New Roman",
+  "Georgia",
+  "Garamond",
+  "Courier New",
+  "Brush Script MT",
+  "Comic Sans MS",
+  "Lucida Console",
+  "Palatino Linotype",
+  "Helvetica",
+  "Century Gothic",
+  "Futura",
+  "Franklin Gothic Medium",
+  "Didot",
+  "Optima"
+];
 let motsVisuels = [];
 let motActif = null;
 
 function setup() {
   createCanvas(800, 600);
-  textFont("Georgia"); // Choix de la police d'écriture
-  textSize(16); // Taille du texte
   chargerPoeme();// Initialisation du poeme
 }
 
@@ -37,7 +57,8 @@ function construireMots(texte) { // Pour récuperer les mots séparées et crée
 function genererFractale(profondeur) { // On utilise une fractale pour générer le poème ( fct récursive)
   if (profondeur > 4 || mots[profondeur].length === 0) return; // Condition d'arrêt
 
-  let mot = random(mots[profondeur]); // On prend un mot au hasard dans la bonne profondeur
+  let index = floor(random(mots[profondeur].length)); // On choisit un mot aléatoire du tableau
+  let mot = mots[profondeur].splice(index, 1)[0]; // On stocke le mot puis on l'enlève du tableau avec splice pour éviter les répétitions
   poeme.push(mot); // On l'ajoute à poème
 
   // On crée deux fractales pour avoir deux lignes poétiques
@@ -50,7 +71,9 @@ function construirePositions() {
     motsVisuels.push({
       texte: mot,
       x: random(50, width - 150),
-      y: random(50, height - 50)  // On place les mots du poeme aléatoirement sur le canvas et on les ajoutent avec leur position respective dans le tableau motsVisuels
+      y: random(50, height - 50),
+      font: random(polices),
+      size: random(14, 45) // On place les mots du poeme aléatoirement sur le canvas et on les ajoutent avec leur position, police et taille respective dans le tableau motsVisuels
     });
   }
 }
@@ -61,6 +84,8 @@ function draw() {
   noStroke();
 
   for (let m of motsVisuels) { 
+    textFont(m.font)
+    textSize(m.size)
     text(m.texte, m.x, m.y); // On ecrit chaque mot sur le canvas
   }
 }
