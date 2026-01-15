@@ -1,4 +1,4 @@
-##Poème Fractal Interactif##
+#**Poème Fractal Interactif**
 
 Ce projet génère des poèmes aléatoires à partir d’une API de poésie et les dispose sur un canvas de manière fractale et chaotique. Chaque mot est unique, interactif et visuellement distinct grâce à des polices et tailles variées.
 
@@ -6,7 +6,7 @@ Ce projet explore la poésie numérique en donnant vie aux mots : le poème devi
 
 
 
-#Fonctionnalités et points techniques#
+##**Fonctionnalités et points techniques**
 
 - Récupération de poèmes via une API :
 
@@ -54,7 +54,7 @@ La combinaison de la génération fractale, des positions aléatoires et des int
 
 
 
-#Objectif artistique#
+##**Objectif artistique**
 
 Au-delà de la génération chaotique et interactive, le projet cherche à donner vie aux mots.
 L’idée est que le poème ne soit pas seulement lu, mais exploré et manipulé par l’utilisateur, créant une expérience immersive où le texte devient vivant et unique à chaque interaction.
