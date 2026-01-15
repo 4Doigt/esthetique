@@ -1,12 +1,12 @@
 let mots = []; // Tableau vide des mots exploitables pour le poème qu'on remplit avec un appel d'API
 let poeme = []; // Tableau vide du poeme qu'on remplit grâce à genererFractale(profondeur)
+let motsVisuels = [];
+let motActif = null;
 
 function setup() {
   createCanvas(800, 600);
   textFont("Georgia"); // Choix de la police d'écriture
   textSize(16); // Taille du texte
-  noLoop(); // Ne pas relancer draw() après le premier passage
-
   chargerPoeme();// Initialisation du poeme
 }
 
@@ -17,7 +17,7 @@ function chargerPoeme() { // Pour récupérer des mots via une API
       let texte = data[0].lines.join(" "); // On concatène toutes les lignes du poème récupéré en une seule texte
       construireMots(texte); // Récupérer les mots rangés dans leur niveau de fractal
       genererFractale(0); // Initialisation du poème
-      redraw(); // NoLoop() empêche draw() de se lancer automatiquement donc on le force à se relancer une seule fois
+      construirePositions();
     })
     .catch(err => console.error(err)); // En cas d'erreur
 }
@@ -34,20 +34,6 @@ function construireMots(texte) { // Pour récuperer les mots séparées et crée
   }
 }
 
-function draw() {
-  let y = 50; // Position initial du premier mot du poème
-  for (let ligne of poeme) {
-    if (y<560){ // On limite la taille vertical du poème
-    text(ligne, 50, y); // On crée du texte en x=50
-    y += 24; // Espace vertical entre les mots du poème
-    }
-    else{
-      break
-    }
-  }
-  afficherPoemeDesordonne();
-}
-
 function genererFractale(profondeur) { // On utilise une fractale pour générer le poème ( fct récursive)
   if (profondeur > 4 || mots[profondeur].length === 0) return; // Condition d'arrêt
 
@@ -59,14 +45,51 @@ function genererFractale(profondeur) { // On utilise une fractale pour générer
   genererFractale(profondeur + 1); // On crée une bifurcation ( Fractale )
 }
   
-function afficherPoemeDesordonne() {
+function construirePositions() {
+  for (let mot of poeme) {
+    motsVisuels.push({
+      texte: mot,
+      x: random(50, width - 150),
+      y: random(50, height - 50)  // On place les mots du poeme aléatoirement sur le canvas et on les ajoutent avec leur position respective dans le tableau motsVisuels
+    });
+  }
+}
+
+function draw() {
   background(245);
   fill(20);
-  noStroke(); // Pas de contour pour le texte
+  noStroke();
 
-  for (let ligne of poeme) { 
-    let x = random(50, width - 150); 
-    let y = random(50, height - 50);
-    text(ligne.trim(), x, y); // On place aléatoirement chaque ligne du poeme sur le canvas ( en l'occurence chaque mot )
+  for (let m of motsVisuels) { 
+    text(m.texte, m.x, m.y); // On ecrit chaque mot sur le canvas
   }
+}
+function mousePressed() {
+  // On cherche le mot avec la souris
+  for (let i = motsVisuels.length - 1; i >= 0; i--) { // On parcourt motsVisuels de la fin au début du tableau
+    let m = motsVisuels[i];
+    let w = textWidth(m.texte);
+    let h = 16;
+
+    if (
+      mouseX > m.x &&
+      mouseX < m.x + w &&
+      mouseY < m.y &&
+      mouseY > m.y - h      // On regarde si le clic de la souris est sur un mot
+    ) {
+      motActif = m; // Ce mot devient alors actif
+      break; // On sort de la boucle
+    }
+  }
+}
+
+function mouseDragged() {
+  if (motActif) { // Si ce mot est actif il va suivre le curseur de la souris (tant qu'il est actif donc tant qu'on clique dessus)
+    motActif.x = mouseX; // Il va suivre la position x de la souris 
+    motActif.y = mouseY; // Il va suivre la position y de la souris
+  }
+}
+
+function mouseReleased() {
+  motActif = null; // Lorsqu'on relâche le bouton de la souris le mot n'est plus actif
 }
