@@ -12,7 +12,7 @@ function setup() {
   createCanvas(800, 600);
   textFont("Georgia"); // Choix de la police d'écriture
   textSize(16); // Taille du texte
-  noLoop(); 
+  noLoop(); // Ne pas relancer draw() après le premier passage
 
   // Appel Initial pour commencer le poème
   genererFractale(0);
